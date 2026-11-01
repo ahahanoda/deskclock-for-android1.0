@@ -1,1 +1,13 @@
-
+name: Build APK
+on: {workflow_dispatch: {}}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: unzip deskclock_source.zip -d project
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 8
+      - run: cd project && ant debug
