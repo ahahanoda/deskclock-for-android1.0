@@ -36,10 +36,10 @@ jobs:
           echo "using $SCRIPT"
           bash "$SCRIPT"
           mkdir -p dist
-          cp "$(dirname "$SCRIPT")/build/DeskClock.apk" dist/DeskClock.apk
+          cp "$(dirname "$SCRIPT")"/build/DeskClock-*.apk dist/
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: DeskClock-apk
-          path: dist/DeskClock.apk
+          path: dist/*.apk
