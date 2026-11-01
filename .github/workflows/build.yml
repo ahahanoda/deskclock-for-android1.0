@@ -18,8 +18,18 @@ jobs:
       - name: Build APK
         run: |
           SCRIPT=$(find . -name build.sh -not -path './.git/*' | head -1)
+          # build.sh が無く deskclock.zip だけある場合は、その場で展開する
           if [ -z "$SCRIPT" ]; then
-            echo "build.sh がリポジトリ内に見つかりません。リポジトリ内のファイル一覧:"
+            ZIP=$(find . -name deskclock.zip -not -path './.git/*' | head -1)
+            if [ -n "$ZIP" ]; then
+              echo "zip を展開します: $ZIP"
+              mkdir -p _unzipped
+              unzip -q "$ZIP" -d _unzipped
+              SCRIPT=$(find _unzipped -name build.sh | head -1)
+            fi
+          fi
+          if [ -z "$SCRIPT" ]; then
+            echo "build.sh も deskclock.zip も見つかりません。リポジトリ内のファイル一覧:"
             find . -path ./.git -prune -o -type f -print
             exit 1
           fi
