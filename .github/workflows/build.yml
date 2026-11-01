@@ -16,10 +16,20 @@ jobs:
           java-version: '17'
 
       - name: Build APK
-        run: bash build.sh
+        run: |
+          SCRIPT=$(find . -name build.sh -not -path './.git/*' | head -1)
+          if [ -z "$SCRIPT" ]; then
+            echo "build.sh がリポジトリ内に見つかりません。リポジトリ内のファイル一覧:"
+            find . -path ./.git -prune -o -type f -print
+            exit 1
+          fi
+          echo "using $SCRIPT"
+          bash "$SCRIPT"
+          mkdir -p dist
+          cp "$(dirname "$SCRIPT")/build/DeskClock.apk" dist/DeskClock.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: DeskClock-apk
-          path: build/DeskClock.apk
+          path: dist/DeskClock.apk
