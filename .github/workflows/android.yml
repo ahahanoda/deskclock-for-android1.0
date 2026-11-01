@@ -11,3 +11,4 @@ jobs:
           distribution: temurin
           java-version: 8
       - run: cd project && ant debug
+      .
